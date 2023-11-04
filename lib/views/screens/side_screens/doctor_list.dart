@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class DoctorList extends StatefulWidget {
   static const String routeName = "/Doctor_List";
@@ -13,11 +14,13 @@ class DoctorList extends StatefulWidget {
 class _DoctorListState extends State<DoctorList> {
   // ignore: unused_field
   List _allResult = [];
-  getAppointment() async {
+  getDoctorList() async {
+    EasyLoading.show(status: "Please wait a Moments...");
     var data = await FirebaseFirestore.instance
-        .collection('Dentist')
-        .orderBy('city')
-        .get();
+        .collection('doctors')
+        .orderBy('cityName')
+        .get()
+        .whenComplete(() => EasyLoading.dismiss());
 
     setState(() {
       _allResult = data.docs;
@@ -26,7 +29,7 @@ class _DoctorListState extends State<DoctorList> {
 
   @override
   void initState() {
-    getAppointment();
+    getDoctorList();
     super.initState();
   }
 
@@ -39,6 +42,7 @@ class _DoctorListState extends State<DoctorList> {
     'Rejected',
   ];
 
+  String approval = 'false';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +96,7 @@ class _DoctorListState extends State<DoctorList> {
         ),
       ),
       body: SizedBox(
-        height: 120,
+        height: double.infinity,
         child: Expanded(
           child: ListView.builder(
             itemCount: _allResult.length,
@@ -100,22 +104,61 @@ class _DoctorListState extends State<DoctorList> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(_allResult[index]['address']),
+                  Text(_allResult[index]['doctorId']),
                   Column(
                     children: [
-                      Text(_allResult[index]['name']),
+                      Text(_allResult[index]['doctorName']),
                     ],
                   ),
-                  const Text("Photo"),
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: Image.network(
+                      _allResult[index]['clinicImage'],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   Column(
                     children: [
-                      Text(_allResult[index]['pin_code']),
+                      Text(_allResult[index]['countryName']),
                     ],
                   ),
-                  Text(_allResult[index]['rating']),
+                  Text(_allResult[index]['stateName']),
                   Column(
                     children: [
-                      Text(_allResult[index]['specialization']),
+                      ElevatedButton(
+                        onPressed: () {
+                          approval = 'true';
+                          var collection =
+                              FirebaseFirestore.instance.collection('doctors');
+                          collection
+                              .doc(_allResult[index][
+                                  'doctorId']) // <-- Doc ID where data should be updated.
+                              .update(
+                            {
+                              "approval": approval,
+                            },
+                          ) // <-- Updated data
+                              .then((_) {
+                            if (approval == 'true') {
+                              setState(() {
+                                approval = 'true';
+                              });
+                            } else {
+                              setState(() {
+                                approval = 'false';
+                              });
+                            }
+                            return approval;
+                          }).catchError((e) {
+                            // ignore: invalid_return_type_for_catch_error
+                            return Text(e.toString());
+                          });
+                        },
+                        child: approval == 'true'
+                            ? const Text("Approved")
+                            : const Text("Pending"),
+                      )
                     ],
                   ),
                 ],

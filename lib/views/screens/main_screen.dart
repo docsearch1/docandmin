@@ -1,9 +1,10 @@
 import 'package:doc_search_web_admin/views/screens/side_screens/banners.dart';
 import 'package:doc_search_web_admin/views/screens/side_screens/commuicatins.dart';
+import 'package:doc_search_web_admin/views/screens/side_screens/doctor_list.dart';
 import 'package:doc_search_web_admin/views/screens/side_screens/feedback.dart';
 import 'package:doc_search_web_admin/views/screens/side_screens/medical_records.dart';
 import 'package:doc_search_web_admin/views/screens/side_screens/online_consultation.dart';
-import 'package:doc_search_web_admin/views/screens/side_screens/doctor_list.dart';
+import 'package:doc_search_web_admin/views/screens/side_screens/orders.dart';
 import 'package:doc_search_web_admin/views/screens/side_screens/refers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
@@ -60,6 +61,10 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         _selectItem = const BannersForPatient();
       });
+    } else if (item.route == Orders.routeName) {
+      setState(() {
+        _selectItem = const Orders();
+      });
     }
   }
 
@@ -71,84 +76,70 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: const Color.fromARGB(255, 18, 209, 231),
         toolbarHeight: 95,
         actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 15.0, 170.0, 0.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  "assets/icons/doctoricon.png",
-                  width: 60,
-                  height: 45,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Doc Search",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 15.0, 90.0, 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Hospital",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
+          Column(
+            children: [
+              Image.asset(
+                "assets/icons/doctoricon.png",
+                width: 60,
+                height: 45,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Doc Search",
+                  style: TextStyle(
+                      fontSize: 15,
                       fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
+                      color: Colors.white),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Lab Test",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Hospital",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
                   ),
+                  textAlign: TextAlign.start,
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Medicine",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.w400),
-                  ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Lab Test",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w400),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Find Doctor",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.w400),
-                  ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Medicine",
+                  style: TextStyle(
+                      color: Color.fromRGBO(255, 255, 255, 1),
+                      fontWeight: FontWeight.w400),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.person,
-                    size: 80,
-                  ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Find Doctor",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w400),
                 ),
-              ],
-            ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.person,
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -205,6 +196,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icons.feedback,
             title: 'FeedBack',
             route: FeedBacks.routeName,
+          ),
+          AdminMenuItem(
+            icon: Icons.outbound_rounded,
+            title: 'Orders',
+            route: Orders.routeName,
           ),
           AdminMenuItem(
             icon: Icons.logout,
